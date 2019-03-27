@@ -4,7 +4,11 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development server
 
+Run `ng build example-ng6-lib --watch` to build and watch the library project for changes.
+
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+Running both of these commands in parallel terminals works best for development.
 
 ## Code scaffolding
 
