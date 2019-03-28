@@ -1,4 +1,6 @@
-# ExampleNg6Lib
+# Angular Word Cloud
+
+My experiments with Angular libraries, [D3](https://d3js.org/) and [Word Clouds](https://github.com/jasondavies/d3-cloud).
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.5.
 
