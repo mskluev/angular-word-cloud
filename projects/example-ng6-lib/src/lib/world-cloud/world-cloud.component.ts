@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, DoCheck, KeyValueDiffers, OnInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, DoCheck, KeyValueDiffers, OnInit, HostListener } from '@angular/core';
 import * as D3 from 'd3';
 
 declare let d3: any;
@@ -8,8 +8,10 @@ declare let d3: any;
     templateUrl: './world-cloud.component.html',
     styleUrls: ['./world-cloud.component.css']
 })
-export class WorldCloudComponent implements OnInit {
-    private _host; // D3 object referencing host DOM object
+export class WorldCloudComponent implements OnInit, AfterViewInit {
+    @ViewChild('svgContainer') svgContainer: ElementRef;
+    @ViewChild('svgElement') svgElement: ElementRef;
+
     private _svg; // SVG in which we will print our chart
     private _margin: {
         // Space between the svg borders and the actual chart graphic
@@ -20,48 +22,89 @@ export class WorldCloudComponent implements OnInit {
     };
     private _width: number; // Component width
     private _height: number; // Component height
-    private _htmlElement: HTMLElement; // Host HTMLElement
     private _minCount: number; // Minimum word count
     private _maxCount: number; // Maximum word count
     private _fontScale; // D3 scale for font size
     private _fillScale; // D3 scale for text color
 
-    private words = ['Hello', 'world', 'normally', 'you', 'want', 'more', 'words', 'than', 'this'].map(function(d) {
+    private words = [
+        'Hello',
+        'world',
+        'normally',
+        'you',
+        'want',
+        'more',
+        'words',
+        'than',
+        'this',
+        'Hello',
+        'world',
+        'normally',
+        'you',
+        'want',
+        'more',
+        'words',
+        'than',
+        'this',
+        'Hello',
+        'world',
+        'normally',
+        'you',
+        'want',
+        'more',
+        'words',
+        'than',
+        'this'
+    ].map(function(d) {
         return { word: d, size: 18 + Math.random() * 18 };
     });
 
-    constructor(private _element: ElementRef, private _keyValueDiffers: KeyValueDiffers) {
-        this._htmlElement = this._element.nativeElement;
-        this._host = D3.select(this._element.nativeElement);
+    constructor() {
+        // this._svg = this.svgElement.nativeElement;
+        this._margin = {
+            top: 0,
+            right: 10,
+            bottom: 10,
+            left: 0
+        };
     }
 
-    ngOnInit() {
+    @HostListener('window:resize', ['$event'])
+    onResize(event) {
+        this._rebuild();
+    }
+
+    getWidth(): number {
+        return this.svgContainer.nativeElement.offsetWidth - this._margin.left - this._margin.right;
+    }
+
+    getHeight(): number {
+        const height = this.svgContainer.nativeElement.offsetHeight - this._margin.left - this._margin.right;
+        console.log(height);
+        return height;
+    }
+
+    ngAfterViewInit() {
+        this._rebuild();
+    }
+
+    ngOnInit() {}
+
+    private _rebuild() {
         this._setup();
         this._buildSVG();
         this._populate();
     }
 
     private _setup() {
-        this._margin = {
-            top: 10,
-            right: 10,
-            bottom: 10,
-            left: 10
-        };
-        this._width =
-            (this._htmlElement.parentElement.clientWidth == 0 ? 500 : this._htmlElement.parentElement.clientWidth) -
-            this._margin.left -
-            this._margin.right;
-        if (this._width < 100) {
-            this._width = 100;
-        }
-        this._height = this._width * 0.75 - this._margin.top - this._margin.bottom;
+        this._width = this.getWidth();
+        this._height = this.getHeight();
 
         this._minCount = 18;
         this._maxCount = 36;
 
-        let minFontSize: number = 18;
-        let maxFontSize: number = 36;
+        const minFontSize = 18;
+        const maxFontSize = 36;
         this._fontScale = D3.scaleLinear()
             .domain([this._minCount, this._maxCount])
             .range([minFontSize, maxFontSize]);
@@ -69,19 +112,19 @@ export class WorldCloudComponent implements OnInit {
     }
 
     private _buildSVG() {
-        this._host.html('');
-        this._svg = this._host
+        const host = D3.select(this.svgContainer.nativeElement).html('');
+        this._svg = host
             .append('svg')
             .attr('width', this._width + this._margin.left + this._margin.right)
-            .attr('height', this._height + this._margin.top + this._margin.bottom)
+            .attr('height', this._height + this._margin.top + this._margin.bottom - 4)
             .append('g')
-            .attr('transform', 'translate(' + ~~(this._width / 2) + ',' + ~~(this._height / 2) + ')');
+            .attr('transform', 'translate(' + this._width / 2 + ',' + this._height / 2 + ')');
     }
 
     private _populate() {
-        let fontFace: string = 'Impact';
-        let fontWeight: string = 'normal';
-        let spiralType: string = 'archimedean';
+        const fontFace = 'Impact';
+        const fontWeight = 'normal';
+        const spiralType = 'archimedean';
 
         d3.layout
             .cloud()
