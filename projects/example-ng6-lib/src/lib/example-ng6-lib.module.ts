@@ -1,3 +1,4 @@
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ExampleNg6LibComponent } from './example-ng6-lib.component';
 import { FooComponent } from './foo/foo.component';
@@ -6,7 +7,7 @@ import { ForceGraphComponent } from './force-graph/force-graph.component';
 
 @NgModule({
     declarations: [ExampleNg6LibComponent, FooComponent, WorldCloudComponent, ForceGraphComponent],
-    imports: [],
+    imports: [BrowserModule],
     exports: [ExampleNg6LibComponent, FooComponent, WorldCloudComponent, ForceGraphComponent]
 })
 export class ExampleNg6LibModule {}

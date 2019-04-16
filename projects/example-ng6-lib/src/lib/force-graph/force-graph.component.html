@@ -1,3 +1,8 @@
-<p>
-  force-graph works!
-</p>
+<div class="graph-container">
+    <svg class="force-graph" viewBox="0 0 300 300">
+        <g stroke="#999" stroke-opacity="0.6"></g>
+        <g stroke="#fff" stroke-opacity="1.5">
+            <circle *ngFor="let d of nodes" [attr.r]="d.r" [attr.fill]="d.fill" [attr.cx]="d.x" [attr.cy]="d.y"></circle>
+        </g>
+    </svg>
+</div>
