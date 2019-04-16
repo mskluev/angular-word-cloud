@@ -1,8 +1,15 @@
-<div class="graph-container">
-    <svg class="force-graph" viewBox="0 0 300 300">
-        <g stroke="#999" stroke-opacity="0.6"></g>
-        <g stroke="#fff" stroke-opacity="1.5">
-            <circle *ngFor="let d of nodes" [attr.r]="d.r" [attr.fill]="d.fill" [attr.cx]="d.x" [attr.cy]="d.y"></circle>
-        </g>
-    </svg>
-</div>
+<svg class="force-graph" [attr.width]="width" [attr.height]="height">
+    <g stroke="#999" stroke-opacity="0.6">
+        <line
+            *ngFor="let l of links"
+            [attr.stroke-width]="Math.sqrt(l.value)"
+            [attr.x1]="l.source.x"
+            [attr.y1]="l.source.y"
+            [attr.x2]="l.target.x"
+            [attr.y2]="l.target.y"
+        ></line>
+    </g>
+    <g stroke="#fff" stroke-opacity="1.5">
+        <circle *ngFor="let d of nodes" [attr.r]="d.r" [attr.fill]="d.fill" [attr.cx]="d.x" [attr.cy]="d.y"></circle>
+    </g>
+</svg>
