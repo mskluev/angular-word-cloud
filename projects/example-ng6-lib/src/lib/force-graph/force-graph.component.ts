@@ -7,27 +7,25 @@ import * as d3 from 'd3';
     styleUrls: ['./force-graph.component.css']
 })
 export class ForceGraphComponent implements OnInit {
-    @Input() width = 500;
-    @Input() height = 500;
+    @Input() width = 1000;
+    @Input() height = 1000;
 
     Math: Math = Math;
-    nodes: any[] = [
-        { id: '1', r: 5, fill: '#1f77b4', x: 10, y: 20 },
-        { id: '2', r: 5, fill: '#1f77b4', x: 20, y: 20 },
-        { id: '3', r: 5, fill: '#ff7f0e', x: 30, y: 20 },
-        { id: '4', r: 5, fill: '#ff7f0e', x: 40, y: 20 },
-        { id: '5', r: 5, fill: '#2ca02c', x: 50, y: 20 }
-    ];
+    nodes: any[] = d3.range(1000).map(i => {
+        return {
+            id: i,
+            r: 5,
+            fill: '#1f77b4'
+        };
+    });
 
-    links: any[] = [
-        { source: '1', target: '2', value: 1 },
-        { source: '1', target: '3', value: 5 },
-        { source: '1', target: '4', value: 10 },
-        { source: '2', target: '4', value: 3 },
-        { source: '2', target: '5', value: 4 },
-        { source: '3', target: '4', value: 8 },
-        { source: '4', target: '5', value: 2 }
-    ];
+    links: any[] = d3.range(this.nodes.length - 1).map(i => {
+        return {
+            source: Math.floor(Math.sqrt(i)),
+            target: i + 1,
+            value: Math.random() * 10
+        };
+    });
 
     constructor() {}
 
@@ -42,12 +40,12 @@ export class ForceGraphComponent implements OnInit {
                 d3
                     .forceLink(this.links)
                     .id((d: { id: string }) => d.id)
-                    .distance(50)
+                    .distance(10)
                     .strength(l => {
                         return l.value / 10;
                     })
             )
-            .force('charge', d3.forceManyBody())
+            .force('charge', d3.forceManyBody().distanceMax(250))
             .force('center', d3.forceCenter(this.width / 2, this.height / 2))
             .stop();
 
