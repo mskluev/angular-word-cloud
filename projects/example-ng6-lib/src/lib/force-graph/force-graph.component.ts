@@ -42,7 +42,8 @@ export class ForceGraphComponent implements OnInit {
                     .id((d: { id: string }) => d.id)
                     .distance(10)
                     .strength(l => {
-                        return l.value / 10;
+                        // return l.value / 10;
+                        return 1.0;
                     })
             )
             .force('charge', d3.forceManyBody().distanceMax(250))
